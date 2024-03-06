@@ -1,0 +1,40 @@
+using System;
+using System.Collections.Generic;
+
+public class HillClimbingAckley
+{
+    private static double Ackley(double x, double y)
+    {
+        return -20 * Math.Exp(-0.2 * Math.Sqrt(0.5 * (x * x + y * y))) - Math.Exp(0.5 * (Math.Cos(2 * Math.PI * x) + Math.Cos(2 * Math.PI * y))) + 20 + Math.E;
+    }
+
+    private static (double x, double y) HillClimbingAckley(int iterations)
+    {
+        Random random = new Random();
+        double currentX = random.NextDouble() * 10 - 5;  // مقدار x ابتدایی بین -5 و 5
+        double currentY = random.NextDouble() * 10 - 5;  // مقدار y ابتدایی بین -5 و 5
+
+        for (int i = 0; i < iterations; i++)
+        {
+            double newX = currentX + (random.NextDouble() - 0.5) * 0.1;  // تولید یک حرکت تصادفی در جهت x
+            double newY = currentY + (random.NextDouble() - 0.5) * 0.1;  // تولید یک حرکت تصادفی در جهت y
+
+            if (Ackley(newX, newY) < Ackley(currentX, currentY))
+            {
+                currentX = newX;
+                currentY = newY;
+            }
+        }
+
+        return (currentX, currentY);
+    }
+
+    public static void Main()
+    {
+        (double optimumX, double optimumY) = HillClimbingAckley(1000);
+        double optimumValue = Ackley(optimumX, optimumY);
+
+        Console.WriteLine("نقطه بهینه (x،y): ({0}،{1})", optimumX, optimumY);
+        Console.WriteLine("مقدار بهینه: " + optimumValue);
+    }
+}
